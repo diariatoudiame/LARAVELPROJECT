@@ -90,7 +90,7 @@
             <div class="sidebar-menu">
                 <ul>
                     <li class="active">
-                        <a href="index.html" class="current-page">
+                        <a href="{{ route('dashboard') }}" class="current-page">
                             <i class="bi bi-house"></i>
                             <span class="menu-text">Admin Dashboard</span>
                         </a>
@@ -122,7 +122,7 @@
 
                     </li>
                     <li class="">
-                        <a href="#">
+                        <a href="{{ route('orders.index') }}">
                             <i class="bi bi-file-earmark-text"></i>
                             <span class="menu-text">Orders</span>
                         </a>

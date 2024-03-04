@@ -43,7 +43,7 @@
                                             <td>
                                                 <div class="btn-group">
                                                     <div class="actions">
-                                                        <a href="#" class="showRow">
+                                                        <a href="{{ route('users.show', $user->id) }}" class="showRow">
                                                             <i class="bi bi-eye text-primary" style="font-size: 1.2rem; vertical-align: middle;"></i> <!-- Icône pour afficher les détails -->
                                                         </a>
                                                         <a href="{{ route('users.edit', $user->id) }}" class="editRow" style="vertical-align: middle;">

@@ -18,4 +18,9 @@ class Customer extends Model
     protected $casts = [
         'gender' => 'string',
     ];
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }
