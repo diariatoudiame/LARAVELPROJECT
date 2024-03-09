@@ -28,9 +28,21 @@ Route::get('/aaa', function () {
 Route::get('/', [\App\Http\Controllers\AuthController::class,'login'])->name('auth.login');
 Route::post('/', [\App\Http\Controllers\AuthController::class,'store'])->name('auth.store');
 
+Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+
 
 Route::middleware(['auth', 'Admin'])->group(function () {
+    Route::post('/users/{user}/assign-role', [UserController::class, 'assignRole'])->name('users.assignRole');
+    Route::get('/users/{user}/assign-role', [UserController::class, 'form'])->name('assign');
     Route::resource('users', UserController::class);
+    Route::get('/customers/{customerId}/orders', [CustomerController::class, 'showHistory'])->name('customers.history');
+
+
+
+});
+Route::middleware(['auth'])->group(function () {
+
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('customers', CustomerController::class);

@@ -10,6 +10,20 @@
                     <a href="{{ route('categories.create') }}" class="btn btn-primary">Add New Category</a>
                 </div>
             </div>
+            <!-- Afficher les messages de succès -->
+            @if (session()->has('success'))
+                <div class="alert alert-success">
+                    {{ session()->get('success') }}
+                </div>
+            @endif
+
+            <!-- Afficher les messages d'erreur -->
+            @if (session()->has('error'))
+                <div class="alert alert-danger">
+                    {{ session()->get('error') }}
+                </div>
+            @endif
+
             <!-- Row start -->
             <div class="row">
                 <div class="col-sm-12 col-12">
@@ -35,23 +49,23 @@
                                             <td>{{ $c->name }}</td>
                                             <td>
                                                 <div class="btn-group">
-                                                <div class="actions">
-                                                    <a href="#" class="showRow">
-                                                        <i class="bi bi-eye text-primary" style="font-size: 1.2rem; vertical-align: middle;"></i> <!-- Icône pour afficher les détails -->
-                                                    </a>
-                                                    <span class="icon-space"></span> <!-- Espace entre les icônes -->
-                                                    <a href="{{ route('categories.edit', $c->id) }}" class="editRow">
-                                                        <i class="bi bi-pencil text-warning" style="font-size: 1.2rem; vertical-align: middle;"></i> <!-- Icône de modification -->
-                                                    </a>
-                                                    <span class="icon-space"></span> <!-- Espace entre les icônes -->
-                                                    <form id="deleteFormC{{ $c->id }}" action="{{ route('categories.destroy', $c->id) }}" method="POST" style="display: inline;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" onclick="confirmDelete('{{ $c->id }}'); return false;"  style="border: none; background: none; padding: 0; cursor: pointer;">
-                                                            <i class="bi bi-trash text-danger" style="font-size: 1.2rem; vertical-align: middle;"></i> <!-- Changement de couleur -->
-                                                        </button>
-                                                    </form>
-                                                </div>
+                                                    <div class="actions">
+                                                        <a href="#" class="showRow">
+                                                            <i class="bi bi-eye text-primary" style="font-size: 1.2rem; vertical-align: middle;"></i> <!-- Icône pour afficher les détails -->
+                                                        </a>
+                                                        <span class="icon-space"></span> <!-- Espace entre les icônes -->
+                                                        <a href="{{ route('categories.edit', $c->id) }}" class="editRow">
+                                                            <i class="bi bi-pencil text-warning" style="font-size: 1.2rem; vertical-align: middle;"></i> <!-- Icône de modification -->
+                                                        </a>
+                                                        <span class="icon-space"></span> <!-- Espace entre les icônes -->
+                                                        <form id="deleteFormC{{ $c->id }}" action="{{ route('categories.destroy', $c->id) }}" method="POST" style="display: inline;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" onclick="confirmDelete('{{ $c->id }}'); return false;"  style="border: none; background: none; padding: 0; cursor: pointer;">
+                                                                <i class="bi bi-trash text-danger" style="font-size: 1.2rem; vertical-align: middle;"></i> <!-- Changement de couleur -->
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -68,12 +82,13 @@
 
         </div>
         <!-- Content wrapper end -->
+        <div class="row">
 
-        <!-- App Footer start -->
-        <div class="app-footer">
-            <span>© Bootstrap Gallery 2023</span>
+            {{ $categories->links() }}
+
         </div>
-        <!-- App footer end -->
+
+
 
     </div>
     <!-- Content wrapper scroll end -->

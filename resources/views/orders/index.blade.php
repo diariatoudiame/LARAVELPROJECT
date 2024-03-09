@@ -12,6 +12,20 @@
                         </a>
                     </div>
                     <div class="card-body">
+                        <!-- Afficher les messages de succès -->
+                        @if (session()->has('success'))
+                            <div class="alert alert-success">
+                                {{ session()->get('success') }}
+                            </div>
+                        @endif
+
+                        <!-- Afficher les messages d'erreur -->
+                        @if (session()->has('error'))
+                            <div class="alert alert-danger">
+                                {{ session()->get('error') }}
+                            </div>
+                        @endif
+
                         @if ($orders->count() > 0)
                             <div class="table-responsive">
                                 <table class="table table-striped">
@@ -20,7 +34,7 @@
                                         <th>Reference</th>
                                         <th>Order Date</th>
                                         <th>Customer</th>
-                                        <th>Status</th>
+
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
@@ -30,24 +44,12 @@
                                             <td>{{ $order->reference }}</td>
                                             <td>{{ $order->order_date }}</td>
                                             <td>{{ $order->customer->firstname }} {{ $order->customer->name }}</td>
-                                            <td>
-                                                @switch($order->status)
-                                                    @case('in progress')
-                                                        <span class="badge badge-warning">In Progress</span>
-                                                        @break
-                                                    @case('completed')
-                                                        <span class="badge badge-success">Completed</span>
-                                                        @break
-                                                    @case('cancelled')
-                                                        <span class="badge badge-danger">Cancelled</span>
-                                                        @break
-                                                @endswitch
-                                            </td>
+
 
                                             <td>
                                                 <div class="btn-group">
                                                     <div class="actions">
-                                                        <a href="#" class="showRow">
+                                                        <a href="{{ route('orders.show', $order->id) }}" class="showRow">
                                                             <i class="bi bi-eye text-primary" style="font-size: 1.2rem; vertical-align: middle;"></i> <!-- Icône pour afficher les détails -->
                                                         </a>
                                                         <a href="{{ route('orders.edit', $order->id) }}" class="editRow" style="vertical-align: middle;">

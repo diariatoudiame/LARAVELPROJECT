@@ -95,12 +95,14 @@
                             <span class="menu-text">Admin Dashboard</span>
                         </a>
                     </li>
+                    @if(Auth::user()->hasRole('admin'))
                     <li>
                         <a href="{{ route('users.index') }}">
                             <i class="bi bi-people"></i> <!-- Changed icon class -->
                             <span class="menu-text">Users</span>
                         </a>
                     </li>
+                    @endif
                     <li>
                         <a href="{{ route('customers.index') }}">
                             <i class="bi bi-person"></i>

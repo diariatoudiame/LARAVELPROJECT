@@ -9,7 +9,7 @@
                     <h5 class="card-title">Add Category</h5>
                 </div>
                 <div class="card-body">
-                    <form id="categoryForm" action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data">
+                    <form id="categoryForm" action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateCategoryForm()">
                         @csrf
                         <div class="row gutters">
                             <div class="col-sm-4 col-12">
@@ -23,11 +23,11 @@
                                     @enderror
                                 </div>
                             </div>
-                                                       <div class="col-sm-12 mt-3">
+                            <div class="col-sm-12 mt-3">
                                 <div class="text-right">
                                     <button type="submit" class="btn btn-primary" >Save</button>
                                     <a href="{{ route('categories.index') }}">
-                                    <button type="button" class="btn btn-secondary">Cancel</button>
+                                        <button type="button" class="btn btn-secondary">Cancel</button>
                                     </a>
                                 </div>
                             </div>
@@ -40,43 +40,25 @@
     <!-- Row end -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
-        document.getElementById('categoryForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+        function validateCategoryForm() {
+            var name = document.getElementById('name').value;
 
-
-            if(this.checkValidity()) {
-
-                Swal.fire({
-                    title: 'Confirmation',
-                    text: 'Are you sure you want to save this category?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, save it!',
-                    cancelButtonText: 'No, cancel!',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-
-                        this.submit();
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        Swal.fire(
-                            'Cancelled',
-                            'Your Category is not saved :)',
-                            'error'
-                        )
-                    }
-                });
-            } else {
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Validation Error',
-                    text: 'Please fill out all required fields correctly.'
-                });
+            if (name.trim() === "") {
+                displaySweetAlert("Error", "Name field is required", "error");
+                return false;
             }
-        });
 
+            return true;
+        }
 
+        function displaySweetAlert(title, message, icon) {
+            Swal.fire({
+                title: title,
+                text: message,
+                icon: icon,
+                confirmButtonText: "OK"
+            });
+        }
     </script>
 
 @endsection

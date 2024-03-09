@@ -25,16 +25,7 @@
                                     <input type="date" class="form-control" id="order_date" name="order_date" value="{{ $order->order_date }}">
                                 </div>
                             </div>
-                            <div class="col-sm-3 col-12">
-                                <div class="form-group">
-                                    <label for="status">Status</label>
-                                    <select class="form-control" id="status" name="status">
-                                        <option value="in progress" @if($order->status == "in progress") selected @endif>In Progress</option>
-                                        <option value="completed" @if($order->status == "completed") selected @endif>Completed</option>
-                                        <option value="cancelled" @if($order->status == "cancelled") selected @endif>Cancelled</option>
-                                    </select>
-                                </div>
-                            </div>
+
                             <div class="col-sm-3 col-12">
                                 <div class="form-group">
                                     <label for="customer_id">Customer</label>

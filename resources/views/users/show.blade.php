@@ -29,6 +29,10 @@
                                 <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary">
                                     <i class="bi bi-pencil me-2"></i> Edit
                                 </a>
+
+                                <a href="{{ route('assign', $user->id) }}" class="btn btn-primary">
+                                     Assign a Role
+                                </a>
                             </div>
                         </div>
                     </div>

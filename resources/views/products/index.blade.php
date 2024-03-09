@@ -6,18 +6,31 @@
         <!-- Content wrapper start -->
         <div class="content-wrapper">
             <div class="row mb-3">
-                <div class="col-sm-4 col-12 d-flex justify-content-between"> <!-- Modifier la classe col-sm-12 en col-sm-6 -->
-                    <a href="{{ route('customers.create') }}" class="btn btn-primary">Add New Customer</a>
+                <div class="col-sm-4 col-12 d-flex justify-content-between">
+                    <a href="{{ route('products.create') }}" class="btn btn-primary">Add New Product</a>
                     <div class="position-relative">
                         <a href="{{ route('products.export') }}" class="btn btn-primary mr-2" style="margin-right: 5px;"><i class="icon-export"></i> Export</a>
                         <div id="loading" class="spinner-border text-primary d-none spinner-border-sm" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>
-                        <span id="loading-text" class="ml-1 d-none" style="position: absolute; top: 0; right: -80px;">Please wait...</span> <!-- Ajuster le positionnement du texte -->
+                        <span id="loading-text" class="ml-1 d-none" style="position: absolute; top: 0; right: -80px;">Please wait...</span>
                     </div>
                 </div>
             </div>
 
+            <!-- Afficher les messages de succès -->
+            @if (session()->has('success'))
+                <div class="alert alert-success">
+                    {{ session()->get('success') }}
+                </div>
+            @endif
+
+            <!-- Afficher les messages d'erreur -->
+            @if (session()->has('error'))
+                <div class="alert alert-danger">
+                    {{ session()->get('error') }}
+                </div>
+            @endif
 
             <!-- Row start -->
             <div class="row">
@@ -80,11 +93,9 @@
         </div>
         <!-- Content wrapper end -->
 
-        <!-- App Footer start -->
-        <div class="app-footer">
-            <span>© Bootstrap Gallery 2023</span>
+        <div class="row">
+            {{ $products->links() }}
         </div>
-        <!-- App footer end -->
 
     </div>
     <!-- Content wrapper scroll end -->
@@ -95,7 +106,7 @@
         }
     </style>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Charger SweetAlert2 depuis CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function confirmDelete(productId) {
             Swal.fire({
@@ -113,10 +124,8 @@
             })
                 .then((willDelete) => {
                     if (willDelete.isConfirmed) {
-
                         document.getElementById("deleteForm" + productId).submit();
                     } else {
-
                         Swal.fire("The product has not been deleted!", "", "info");
                     }
                 });

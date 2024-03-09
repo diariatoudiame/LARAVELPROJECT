@@ -11,6 +11,20 @@
                 </div>
             </div>
 
+            <!-- Afficher les messages de succès -->
+            @if (session()->has('success'))
+                <div class="alert alert-success">
+                    {{ session()->get('success') }}
+                </div>
+            @endif
+
+            <!-- Afficher les messages d'erreur -->
+            @if (session()->has('error'))
+                <div class="alert alert-danger">
+                    {{ session()->get('error') }}
+                </div>
+            @endif
+
             <!-- Row start -->
             <div class="row">
                 <div class="col-sm-12 col-12">
@@ -73,11 +87,16 @@
 
         </div>
         <!-- Content wrapper end -->
+        <div class="row">
+
+            {{ $users->links() }}
+
+        </div>
 
         <!-- App Footer start -->
-        <div class="app-footer">
-            <span>© Bootstrap Gallery 2023</span>
-        </div>
+        <!--  <div class="app-footer">
+              <span>© Bootstrap Gallery 2023</span>
+          </div> -->
         <!-- App footer end -->
 
     </div>
@@ -88,6 +107,7 @@
             margin-right: 15px; /* Espacement entre les icônes */
         }
     </style>
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Charger SweetAlert2 depuis CDN -->
     <script>

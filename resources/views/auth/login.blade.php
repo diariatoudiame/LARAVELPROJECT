@@ -42,9 +42,15 @@
                         <h5>Welcome back,<br />Please Login to your Account.</h5>
                         <div class="form-group">
                             <input type="text" name="email" id="email" class="form-control" placeholder="Email Address" />
+                            @error('email')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <input type="password" name="password" id="password" class="form-control" placeholder="Password" />
+                            @error('password')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div class="actions mb-4">
                             <div class="custom-control custom-checkbox">
@@ -53,13 +59,11 @@
                             </div>
                             <button type="submit" class="btn btn-primary">Login</button>
                         </div>
-                        <div class="forgot-pwd">
-                            <a class="link" href="forgot-pwd.html">Forgot password?</a>
-                        </div>
+
                         <hr>
                         <div class="actions align-left">
                             <span class="additional-link">New here?</span>
-                            <a href="signup.html" class="btn btn-secondary">Create an Account</a>
+                            <a href="{{ route('register') }}" class="btn btn-secondary">Create an Account</a>
                         </div>
                     </div>
                 </div>

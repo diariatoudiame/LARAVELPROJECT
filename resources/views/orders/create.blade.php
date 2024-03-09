@@ -24,16 +24,7 @@
                                     <input type="date" class="form-control" id="order_date" name="order_date" value="{{ date('Y-m-d') }}">
                                 </div>
                             </div>
-                            <div class="col-sm-3 col-12">
-                                <div class="form-group">
-                                    <label for="status">Status</label>
-                                    <select class="form-control" id="status" name="status">
-                                        <option value="in progress" selected>In Progress</option>
-                                        <option value="completed">Completed</option>
-                                        <option value="cancelled">Cancelled</option>
-                                    </select>
-                                </div>
-                            </div>
+
                             <div class="col-sm-3 col-12">
                                 <div class="form-group">
                                     <label for="customer_id">Customer</label>

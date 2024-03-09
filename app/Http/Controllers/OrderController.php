@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -38,9 +39,9 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        // Form data validation
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
-            'status' => 'required|in:in progress,completed,cancelled',
             'order_date' => 'required|date',
             'product_id' => 'required|array|min:1',
             'product_id.*' => 'exists:products,id',
@@ -48,18 +49,19 @@ class OrderController extends Controller
             'quantity.*' => 'required|integer|min:1',
         ]);
 
-        // Création de la commande
+        // Creating the order
         $order = new Order();
         $order->customer_id = $request->customer_id;
         $order->reference = $request->reference;
-        $order->status = $request->status;
+        if(Auth::check()){
+            $order->user_id = Auth::user()->id;
+        }
         $order->order_date = $request->order_date;
         $order->total_amount = 0;
 
-        // Sauvegarde de la commande
+        // Saving the order
         $order->save();
 
-        // Calcul du montant total de la commande
         $totalAmount = 0;
 
         foreach ($request->product_id as $key => $productId) {
@@ -67,31 +69,31 @@ class OrderController extends Controller
             $quantityToOrder = $request->quantity[$key];
 
             if ($quantityToOrder > $product->quantity_in_stock) {
-                return redirect()->back()->with('error', 'La quantité commandée dépasse le stock disponible pour le produit : ' . $product->name);
+                return redirect()->back()->with('error', 'The ordered quantity exceeds the available stock for product: ' . $product->name);
             }
 
             $productAmount = $product->price * $quantityToOrder;
             $totalAmount += $productAmount;
 
-            // Attache le produit à la commande avec les détails
+            // Attaching the product to the order with details
             $order->products()->attach($product->id, [
                 'quantity' => $quantityToOrder,
                 'unit_price' => $product->price,
                 'total_price' => $productAmount,
             ]);
 
-            // Met à jour la quantité en stock du produit
+
             $product->quantity_in_stock -= $quantityToOrder;
             $product->save();
         }
 
-        // Met à jour le montant total de la commande
+
         $order->total_amount = $totalAmount;
         $order->save();
 
-        return redirect()->route('orders.index')->with('success', 'Commande créée avec succès !');
+        // Redirecting to the orders page with a success message
+        return redirect()->route('orders.index')->with('success', 'Order created successfully!');
     }
-
 
     /**
      * Display the specified resource.
@@ -119,33 +121,33 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
-            'status' => 'required|in:in progress,completed,cancelled',
             'order_date' => 'required|date',
             'product_id' => 'required|array|min:1',
             'product_id.*' => 'exists:products,id',
             'quantity' => 'required|array|min:1',
             'quantity.*' => 'required|integer|min:1',
-
         ]);
 
+        $totalAmount = 0; // Initialize the variable for total amount
 
+        // Retrieving the ID of the authenticated user
+        $userId = Auth::id();
+        $order->reference = $request->reference;
         $order->customer_id = $request->customer_id;
-        $order->status = $request->status;
         $order->order_date = $request->order_date;
         $order->save();
 
-        // Préparer les données pour la synchronisation
+        // Prepare data for synchronization
         $syncData = [];
         foreach ($request->product_id as $key => $productId) {
             $product = Product::find($productId);
             $quantityToOrder = $request->quantity[$key];
 
-            // Vérifier si la quantité commandée est disponible en stock
+            // Check product stock availability
             if ($quantityToOrder > $product->quantity_in_stock) {
-                return redirect()->back()->with('error', 'La quantité commandée dépasse le stock disponible pour le produit : ' . $product->name);
+                return redirect()->back()->with('error', 'The ordered quantity exceeds the available stock for the product: ' . $product->name);
             }
 
             $productAmount = $product->price * $quantityToOrder;
@@ -157,20 +159,19 @@ class OrderController extends Controller
                 'total_price' => $productAmount,
             ];
 
-            // Réduire la quantité en stock du produit
+            // Reduce product stock quantity
             $product->quantity_in_stock -= $quantityToOrder;
             $product->save();
         }
 
-
-        // Synchroniser les produits attachés à la commande avec les nouvelles données
+        // Synchronize products attached to the order with the new data
         $order->products()->sync($syncData);
         $order->total_amount = $totalAmount;
+        $order->user_id = $userId; // Assigning the ID of the authenticated user
         $order->save();
 
-        return redirect()->route('orders.index')->with('success', 'Commande mise à jour avec succès !');
+        return redirect()->route('orders.index')->with('success', 'Order updated successfully!');
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -183,6 +184,14 @@ class OrderController extends Controller
         // Supprimer la commande
         $order->delete();
 
-        return redirect()->route('orders.index')->with('success', 'Commande supprimée avec succès !');
+        return redirect()->route('orders.index')->with('success', 'Order deleted Successfully!');
+    }
+
+    public function showCustomerOrders($customerId)
+    {
+        $customer = Customer::find($customerId);
+        $orders = $customer->orders;
+
+        return view('orders.customer_orders', compact('customer', 'orders'));
     }
 }

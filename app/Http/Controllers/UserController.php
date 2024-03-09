@@ -9,12 +9,36 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
+
+
+    public function assignRole(Request $request, $userId)
+    {
+
+        if (auth()->user()->hasRole('Admin')) {
+
+            $user = User::find($userId);
+            $role = Role::find($request->input('role_id'));
+
+            if ($role) {
+                $user->roles()->sync([$role->id]);
+                return redirect()->route('users.show',$user)->with('success', 'Role successfully assigned to the user.');
+            } else {
+                return redirect()->back()->with('error', 'The specified role does not exist.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'You are not authorized to assign roles.');
+        }
+    }
+    public function form(User $user){
+        $roles = Role::all();
+        return view('users.assign',compact('roles','user'));
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::simplePaginate(2);
         return view('users.index',compact('users'));
     }
 
@@ -58,7 +82,7 @@ class UserController extends Controller
 
         ]);
 
-        // Associe le rôle à l'utilisateur
+
         $role = Role::find($data['role_id']);
         $user->roles()->attach($role->id);
 
@@ -87,9 +111,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, string $id)
     {
         $data = $request->validate([
@@ -147,6 +169,6 @@ class UserController extends Controller
         $user->delete();
         $user->roles()->detach();
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
 }

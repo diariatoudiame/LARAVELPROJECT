@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('reference')->unique();
             $table->dateTime('order_date');
             $table->integer('total_amount');
-            $table->string('status')->default('in progress');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

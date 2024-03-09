@@ -7,12 +7,24 @@ use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
+
+    public function showHistory($id)
+    {
+
+        $customer = Customer::find($id);
+
+
+        $orders = $customer->orders()->paginate(10);
+
+
+        return view('customers.history', compact('customer', 'orders'));
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $customers = Customer::all();
+        $customers = Customer::simplePaginate(3);
         return view('customers.index', compact('customers'));
     }
 

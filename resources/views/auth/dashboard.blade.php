@@ -50,7 +50,7 @@
     </div>
     <!-- Row end -->
 
-    <!-- Row start -->
+    <!-- Row start
     <div class="row gutters">
         <div class="col-sm-12">
             <div class="card">
@@ -82,6 +82,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- Row end -->
 @endsection

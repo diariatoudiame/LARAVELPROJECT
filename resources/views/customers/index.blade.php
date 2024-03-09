@@ -5,17 +5,31 @@
         <!-- Content wrapper start -->
         <div class="content-wrapper">
             <div class="row mb-3">
-                <div class="col-sm-4 col-12 d-flex justify-content-between"> <!-- Modifier la classe col-sm-12 en col-sm-6 -->
+                <div class="col-sm-4 col-12 d-flex justify-content-between">
                     <a href="{{ route('customers.create') }}" class="btn btn-primary">Add New Customer</a>
                     <div class="position-relative">
                         <a href="{{ route('exportPDF') }}" class="btn btn-primary mr-2" style="margin-right: 5px;"><i class="icon-export"></i> Export</a>
                         <div id="loading" class="spinner-border text-primary d-none spinner-border-sm" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>
-                        <span id="loading-text" class="ml-1 d-none" style="position: absolute; top: 0; right: -80px;">Please wait...</span> <!-- Ajuster le positionnement du texte -->
+                        <span id="loading-text" class="ml-1 d-none" style="position: absolute; top: 0; right: -80px;">Please wait...</span>
                     </div>
                 </div>
             </div>
+
+            <!-- Afficher les messages de succès -->
+            @if (session()->has('success'))
+                <div class="alert alert-success">
+                    {{ session()->get('success') }}
+                </div>
+            @endif
+
+            <!-- Afficher les messages d'erreur -->
+            @if (session()->has('error'))
+                <div class="alert alert-danger">
+                    {{ session()->get('error') }}
+                </div>
+            @endif
 
             <!-- Row start -->
             <div class="row">
@@ -52,22 +66,26 @@
                                                 <div class="btn-group">
                                                     <div class="actions">
                                                         <a href="{{ route('customers.show', $customer->id) }}" class="showRow">
-                                                            <i class="bi bi-eye text-primary" style="font-size: 1.2rem; "></i>
+                                                            <i class="bi bi-eye text-primary" style="font-size: 1.2rem; vertical-align: middle;"></i> <!-- Icône pour afficher les détails -->
                                                         </a>
-                                                        <span class="icon-space"></span>
-                                                        <a href="{{ route('customers.edit', $customer->id) }}" class="editRow">
-                                                            <i class="bi bi-pencil text-warning" style="font-size: 1.2rem; "></i>
+                                                        <a href="{{ route('customers.edit', $customer->id) }}" class="editRow" style="vertical-align: middle;">
+                                                            <i class="bi bi-pencil text-warning" style="font-size: 1.2rem;"></i> <!-- Icône de modification -->
                                                         </a>
-                                                        <span class="icon-space"></span>
-                                                        <form id="deleteForm{{ $customer->id }}" action="{{ route('customers.destroy', $customer->id) }}" method="POST">
+                                                        @if(Auth::user()->hasRole('admin'))
+                                                        <a href="{{ route('customers.history', $customer->id) }} " class="editRow" style="vertical-align: middle;">
+                                                            <i class="bi bi-clock-history text-info icon-space" style="font-size: 1.2rem;"></i> <!-- Icône d'historique -->
+                                                        </a>
+                                                        @endif
+                                                        <form id="deleteForm{{ $customer->id }}" action="{{ route('customers.destroy', $customer->id) }}" method="POST" style="display: inline-block; vertical-align: middle;">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" onclick="confirmDelete('{{ $customer->id }}'); return false;"  style="border: none; background: none; padding: 0; cursor: pointer;">
-                                                                <i class="bi bi-trash text-danger" style="font-size: 1.2rem; "></i>
+                                                            <button type="submit" onclick="confirmDelete('{{ $customer->id }}'); return false;" style="border: none; background: none;">
+                                                                <i class="bi bi-trash text-danger" style="font-size: 1.2rem;"></i> <!-- Changement de couleur -->
                                                             </button>
                                                         </form>
                                                     </div>
                                                 </div>
+
                                             </td>
                                         </tr>
                                     @endforeach
@@ -83,12 +101,9 @@
 
         </div>
         <!-- Content wrapper end -->
-
-        <!-- App Footer start -->
-        <div class="app-footer">
-            <span>© Bootstrap Gallery 2023</span>
+        <div class="row">
+            {{ $customers->links() }}
         </div>
-        <!-- App footer end -->
 
     </div>
     <!-- Content wrapper scroll end -->
@@ -117,10 +132,8 @@
             })
                 .then((willDelete) => {
                     if (willDelete.isConfirmed) {
-
                         document.getElementById("deleteForm" + customerId).submit();
                     } else {
-
                         Swal.fire("The customer has not been deleted!", "", "info");
                     }
                 });
@@ -138,7 +151,7 @@
                 setTimeout(function() {
                     loading.classList.add('d-none');
                     loadingText.classList.add('d-none');
-                }, 2000); // Temps simulé pour le chargement. Remplacez-le par la logique de téléchargement réelle.
+                }, 2000);
             });
         });
     </script>

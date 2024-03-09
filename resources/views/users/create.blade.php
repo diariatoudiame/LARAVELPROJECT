@@ -9,7 +9,7 @@
                     <h5 class="card-title">Add User</h5>
                 </div>
                 <div class="card-body">
-                    <form id="userForm" action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
+                    <form id="userForm" action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateUserForm()">
                         @csrf
                         <div class="row gutters">
                             <div class="col-sm-4 col-12">
@@ -90,7 +90,7 @@
                                 <div class="text-right">
                                     <button type="submit" class="btn btn-primary" >Save</button>
                                     <a href="{{ route('users.index') }}">
-                                    <button type="button" class="btn btn-secondary">Cancel</button>
+                                        <button type="button" class="btn btn-secondary">Cancel</button>
                                     </a>
                                 </div>
                             </div>
@@ -103,42 +103,30 @@
     <!-- Row end -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
-        document.getElementById('userForm').addEventListener('submit', function(event) {
-            // Empêche la soumission du formulaire par défaut
-            event.preventDefault();
+        function validateUserForm() {
+            var name = document.getElementById('name').value;
+            var firstname = document.getElementById('firstname').value;
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+            var role_id = document.getElementById('role_id').value;
+            var photo = document.getElementById('photo').value;
 
-            // Vérifie si le formulaire est valide
-            if(this.checkValidity()) {
-                // Affiche la boîte de dialogue de confirmation
-                Swal.fire({
-                    title: 'Confirmation',
-                    text: 'Are you sure you want to save this user?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, save it!',
-                    cancelButtonText: 'No, cancel!',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Si l'utilisateur confirme, soumet le formulaire
-                        this.submit();
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        Swal.fire(
-                            'Cancelled',
-                            'Your user is not saved :)',
-                            'error'
-                        )
-                    }
-                });
-            } else {
-                // Affiche un message d'erreur si la validation échoue
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Validation Error',
-                    text: 'Please fill out all required fields correctly.'
-                });
+            if (name.trim() === "" || firstname.trim() === "" || email.trim() === "" || password.trim() === "" || role_id.trim() === "" || photo.trim() === "") {
+                displaySweetAlert("Error", "All fields are required", "error");
+                return false;
             }
-        });
+
+            return true;
+        }
+
+        function displaySweetAlert(title, message, icon) {
+            Swal.fire({
+                title: title,
+                text: message,
+                icon: icon,
+                confirmButtonText: "OK"
+            });
+        }
 
         function previewPhoto(event) {
             const preview = document.getElementById('selectedPhoto');

@@ -7,113 +7,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Meta -->
-    <meta name="description" content="Vivo - Responsive Bootstrap 5 Dashboard Template">
-    <meta name="author" content="Bootstrap Gallery" />
-    <link rel="canonical" href="https://www.bootstrap.gallery/">
-    <meta property="og:url" content="https://www.bootstrap.gallery">
-    <meta property="og:title" content="Admin Templates - Dashboard Templates | Bootstrap Gallery">
-    <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
-    <meta property="og:type" content="Website">
-    <meta property="og:site_name" content="Bootstrap Gallery">
-    <link rel="shortcut icon" href="assets/images/favicon.svg">
+    <meta name="description" content="Responsive Bootstrap Admin Dashboards">
+    <meta name="author" content="Bootstrap Gallery">
+    <link rel="shortcut icon" href="{{asset('frontend/assets/img/logo.svg')}}" />
 
     <!-- Title -->
-    <title>Vivo Admin Template - Admin Dashboard</title>
-
+    <title>Best Admin Templates - Register</title>
 
     <!-- *************
         ************ Common Css Files *************
     ************ -->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{asset('frontend/assets/css/bootstrap.min.css')}}" />
 
-    <!-- Animated css -->
-    <link rel="stylesheet" href="assets/css/animate.css">
-
-    <!-- Bootstrap font icons css -->
-    <link rel="stylesheet" href="assets/fonts/bootstrap/bootstrap-icons.css">
-
-    <!-- Main css -->
-    <link rel="stylesheet" href="assets/css/main.min.css">
-
+    <!-- Master CSS -->
+    <link rel="stylesheet" href="{{asset('frontend/assets/css/main.css')}}" />
 
 </head>
 
-<body class="login-container">
+<body class="authentication">
 
-<!-- Loading wrapper start -->
-<!-- <div id="loading-wrapper">
-    <div class="spinner">
-        <div class="line1"></div>
-        <div class="line2"></div>
-        <div class="line3"></div>
-        <div class="line4"></div>
-        <div class="line5"></div>
-        <div class="line6"></div>
-    </div>
-</div> -->
-<!-- Loading wrapper end -->
+<!-- Container start -->
+<div class="container">
 
-<!-- Login box start -->
-<form action="index.html">
-    <div class="login-box">
-        <div class="login-form">
-            <a href="index.html" class="login-logo">
-                <img src="assets/images/logo.svg" alt="Vico Admin" />
-            </a>
-            <div class="login-welcome">
-                Welcome back, <br />Please create your Vivo admin account.
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Username</label>
-                <input type="text" class="form-control">
-            </div>
-            <div class="mb-3">
-                <div class="d-flex justify-content-between">
-                    <label class="form-label">Password</label>
-                    <div class="form-check ml-auto me-0">
-                        <input class="form-check-input" type="checkbox" value="" id="savePassword">
-                        <label class="form-check-label" for="savePassword">Save Password</label>
+    <form action="{{ route('register.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="row justify-content-md-center">
+            <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
+                <div class="login-screen">
+                    <div class="login-box">
+                        <a href="#" class="login-logo">
+                            <img src="{{asset('frontend/assets/img/logo.svg')}}" alt="Admin Dashboards" />
+                        </a>
+                        <h5>Welcome, <br />Create your Account.</h5>
+                        <div class="form-group">
+                            <input type="text" name="name" id="name" class="form-control" placeholder="Name" />
+                            @error('name')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="firstname" id="firstname" class="form-control" placeholder="Firstname" />
+                            @error('firstname')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" id="email" class="form-control" placeholder="Email Address" />
+                            @error('email')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Password" />
+                            @error('password')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <input type="file" name="photo" id="photo" class="form-control"  />
+                            @error('photo')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <input type="hidden" name="role_id" value="2">
+                        <div class="actions mb-4">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
+                        <hr>
                     </div>
-                </div>
-                <input type="password" class="form-control">
-            </div>
-            <div class="login-form-actions">
-                <button type="submit" class="btn"> <span class="icon"> <i class="bi bi-arrow-right-circle"></i> </span>
-                    Signup</button>
-            </div>
-            <div class="login-form-actions">
-                <button type="submit" class="btn"> <img src="assets/images/google.svg" class="login-icon"
-                                                        alt="Signup using Gmail">
-                    Signup using Gmail</button>
-            </div>
-            <div class="login-form-footer">
-                <div class="additional-link">
-                    Already have an account? <a href="login.html"> Login</a>
                 </div>
             </div>
         </div>
-    </div>
-</form>
-<!-- Login box end -->
+    </form>
 
-<!-- *************
-    ************ Required JavaScript Files *************
-************* -->
-<!-- Required jQuery first, then Bootstrap Bundle JS -->
-<script src="assets/js/jquery.min.js"></script>
-<script src="assets/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/modernizr.js"></script>
-<script src="assets/js/moment.js"></script>
-
-<!-- *************
-    ************ Vendor Js Files *************
-************* -->
-
-<!-- Main Js Required -->
-<script src="assets/js/main.js"></script>
+</div>
+<!-- Container end -->
 
 </body>
 
